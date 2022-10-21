@@ -38,7 +38,7 @@ input {
   height: 5rem;
   width: 5rem;
   padding: 0.5em;
-  transition: all 0.1s ease;
+  transition: all 0.07s linear;
 }
 @media screen and (max-width: 370px) {
   .btn {

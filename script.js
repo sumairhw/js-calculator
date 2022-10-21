@@ -10,7 +10,11 @@ let floatFlag = false;
 for (let btn of buttons) {
   btn.addEventListener("click", (event) => {
     const val = event.target.textContent;
-    btn.classList.add("active");
+    // debugger;
+
+    if (!btn.classList.contains("active")) {
+      btn.classList.add("active");
+    }
 
     if (outputbox.value.length >= 18) {
       return;
@@ -89,7 +93,7 @@ function isOperator(value) {
 }
 
 function syntaxValidator(nums, operator) {
-  if (nums[0] == null || nums[1] == null) {
+  if (isNaN(nums[0]) || isNaN(nums[1])) {
     alert("Syntax Error: Expression Invalid");
     return false;
   }
@@ -147,18 +151,6 @@ function displayResult(result) {
   outputbox.value = result;
 }
 
-function debug(extra = "") {
-  console.log(
-    extra,
-    "str: ",
-    outputbox.value,
-    "\tp op:",
-    Operator,
-    "\tnxt op:",
-    nextOperator
-  );
-}
-
 outputbox.addEventListener("keydown", (event) => {
   if (event.keyCode == 13) {
     let tmp = outputbox.value;
@@ -170,11 +162,16 @@ outputbox.addEventListener("keydown", (event) => {
     }
     alert("Invalid Operation");
   }
+
+  if (!(event.keyCode >= 48 && event.keyCode <= 57)) {
+    event.preventDefault();
+  }
 });
 
 for (let btn of buttons) {
   btn.addEventListener("transitionend", (event) => {
     if (event.propertyName != "transform") return;
+    // debugger;
     event.target.classList.remove("active");
   });
 }
