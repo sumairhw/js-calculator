@@ -13,6 +13,7 @@ body {
 }
 
 #app {
+  min-width: 425px;
   max-width: 40%;
   background: #06283d;
   border: 1rem solid #06283d;

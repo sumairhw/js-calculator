@@ -11,8 +11,23 @@ for (let btn of buttons) {
   btn.addEventListener("click", (event) => {
     const val = event.target.textContent;
 
+    if (outputbox.value.length >= 18) {
+      return;
+    }
+
+    if (btn.id == "backspace") {
+      let temp = outputbox.value.slice(0, -1);
+      outputbox.value = temp;
+      return;
+    }
+
     if (val == "AC") {
       reset();
+      return;
+    }
+
+    if (val == "=") {
+      operation(Operator, "eqOperation");
       return;
     }
 
@@ -21,6 +36,30 @@ for (let btn of buttons) {
         return;
       }
       floatFlag = true;
+    }
+
+    if (val == "%") {
+      let num = +outputbox.value;
+      if (num == outputbox.value) {
+        let tmp = parseFloat(outputbox.value);
+        reset();
+        outputbox.value = tmp / 100;
+      } else {
+        alert("Operation not valid");
+      }
+      return;
+    }
+
+    if (val == "-/+") {
+      let num = +outputbox.value;
+      if (num == outputbox.value) {
+        let tmp = parseFloat(outputbox.value);
+        reset();
+        outputbox.value = -tmp;
+      } else {
+        alert("Operation not valid");
+      }
+      return;
     }
 
     if (!isOperator(val)) {
@@ -48,9 +87,7 @@ function isOperator(value) {
   return false;
 }
 
-function unaryOperation(operator) {}
-
-function operation(operator) {
+function operation(operator, args) {
   let nums = outputbox.value.split(operator).map((num) => parseFloat(num));
   if (!floatFlag) nums.map((num) => parseInt(num));
   let res;
@@ -71,8 +108,14 @@ function operation(operator) {
   }
 
   res = res.toFixed(2);
-  if (nextOperator) res = `${res} ${nextOperator} `;
+  if (args === "eqOperation") {
+    reset();
+  } else if (nextOperator) {
+    res = `${res} ${nextOperator} `;
+  }
+
   displayResult(res);
+  debug(`after op: {operator}`);
 }
 
 function reset() {
@@ -99,10 +142,15 @@ function debug(extra = "") {
   );
 }
 
-function add() {
-  let nums = outputbox.value.split("+");
-  let res = parseInt(nums[0]) + parseInt(nums[1]);
-  debug("after add: ");
-  if (nextOperator) res = `${res} ${nextOperator} `;
-  displayResult(res);
-}
+outputbox.addEventListener("keydown", (event) => {
+  if (event.keyCode == 13) {
+    let tmp = outputbox.value;
+    for (let op of operatorArray) {
+      if (tmp.indexOf(op) >= 1) {
+        operation(op, "eqOperation");
+        return;
+      }
+    }
+    alert("Invalid Operation");
+  }
+});
