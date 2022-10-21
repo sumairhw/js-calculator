@@ -10,6 +10,7 @@ let floatFlag = false;
 for (let btn of buttons) {
   btn.addEventListener("click", (event) => {
     const val = event.target.textContent;
+    btn.classList.add("active");
 
     if (outputbox.value.length >= 18) {
       return;
@@ -87,8 +88,20 @@ function isOperator(value) {
   return false;
 }
 
+function syntaxValidator(nums, operator) {
+  if (nums[0] == null || nums[1] == null) {
+    alert("Syntax Error: Expression Invalid");
+    return false;
+  }
+  return true;
+}
+
 function operation(operator, args) {
   let nums = outputbox.value.split(operator).map((num) => parseFloat(num));
+  if (!syntaxValidator(nums, operator)) {
+    return;
+  }
+
   if (!floatFlag) nums.map((num) => parseInt(num));
   let res;
 
@@ -103,11 +116,15 @@ function operation(operator, args) {
       res = nums[0] * nums[1];
       break;
     case "/":
+      if (nums[1] == 0) {
+        alert("Math Error: Cannot divide by zero");
+        return;
+      }
       res = nums[0] / nums[1];
       break;
   }
 
-  res = res.toFixed(2);
+  if (floatFlag) res = res.toFixed(2);
   if (args === "eqOperation") {
     reset();
   } else if (nextOperator) {
@@ -154,3 +171,10 @@ outputbox.addEventListener("keydown", (event) => {
     alert("Invalid Operation");
   }
 });
+
+for (let btn of buttons) {
+  btn.addEventListener("transitionend", (event) => {
+    if (event.propertyName != "transform") return;
+    event.target.classList.remove("active");
+  });
+}

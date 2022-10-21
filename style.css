@@ -13,8 +13,7 @@ body {
 }
 
 #app {
-  min-width: 425px;
-  max-width: 40%;
+  width: min(425px, 95%);
   background: #06283d;
   border: 1rem solid #06283d;
   border-bottom: 0;
@@ -34,11 +33,27 @@ input {
 
 .btn {
   border: none;
-  border-radius: 50em;
+  border-radius: 6em;
   font-size: 1.75rem;
   height: 5rem;
   width: 5rem;
   padding: 0.5em;
+  transition: all 0.1s ease;
+}
+@media screen and (max-width: 370px) {
+  .btn {
+    font-size: 1.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+}
+
+@media screen and (min-width: 371px) and (max-width: 420px) {
+  .btn {
+    font-size: 1.6rem;
+    width: 4rem;
+    height: 4rem;
+  }
 }
 
 .btn--light {
@@ -59,4 +74,10 @@ input {
   justify-items: center;
   gap: 0.5rem;
   margin: 1rem 0;
+}
+
+.active {
+  transform: scale(0.9);
+  border-color: #86d6d2;
+  box-shadow: 0 0 1rem #86d6d2;
 }
